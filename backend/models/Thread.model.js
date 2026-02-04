@@ -4,7 +4,7 @@ const MessageSchema = new mongoose.Schema(
   {
     role: {
       type: String,
-      enum: ["user", "assistant"],
+      enum: ["User", "assistant"],
       required: true,
     },
     content: {
