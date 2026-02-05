@@ -1,0 +1,143 @@
+.chatWindow_Container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  padding: 0 1rem;
+  flex-direction: column;
+}
+
+/* chat window Nav */
+
+.chatWindow_nav {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  flex-shrink: 0;
+  border-bottom: 0.5px solid #303030;
+}
+
+/* chat window nav left */
+.chatWindow_nav_left {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.navLogo {
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  gap: 0.2rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.navLogo:hover {
+  background-color: #303030;
+}
+
+.dropDown {
+  display: flex;
+  align-items: center;
+}
+
+.dropDown > svg {
+  height: 1rem;
+  cursor: pointer;
+}
+
+/* chat window nav right */
+.chatWindow_nav_right > span {
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  transition: all 0.2s ease-in-out;
+}
+
+.chatWindow_nav_right > span:hover {
+  background-color: #303030;
+}
+.chatWindow_nav_right > span > svg {
+  height: 1.5rem;
+}
+
+/* Chat Window Body */
+.chatWindow_body {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Chat Window Footer */
+.chatWindow_foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.inputBox {
+  width: 100%;
+  position: relative;
+  max-width: 43.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inputBox > input {
+  width: 100%;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 1.25rem;
+  font-size: 0.8rem;
+  border-radius: 2rem;
+  box-shadow:
+    rgba(0, 0, 0, 0.05) 0 54px 55px,
+    rgba(0, 0, 0, 0.05) 0 -12px 30px,
+    rgba(0, 0, 0, 0.05) 0 4px 6px,
+    rgba(0, 0, 0, 0.05) 0 12px 3px,
+    rgba(0, 0, 0, 0.05) 0 -3px 5px;
+}
+
+.inputBox > input:focus {
+  outline: none;
+}
+
+.submit > svg {
+  cursor: pointer;
+  height: 1.2rem;
+  font-size: 20px;
+  position: absolute;
+  right: 1.5%;
+  bottom: 18%;
+  padding: 0.5rem;
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit > svg > path {
+  color: #000;
+}
+
+.submit > svg:hover {
+  color: #fff;
+}
+
+.info {
+  font-size: 0.8rem;
+  padding: 0.5rem;
+  color: #b4b4b4;
+}

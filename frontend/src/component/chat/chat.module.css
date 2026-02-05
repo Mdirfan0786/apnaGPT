@@ -1,0 +1,93 @@
+.chats {
+  width: 700px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.userDiv {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.6rem;
+}
+
+.gptDiv {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 0.6rem;
+}
+
+.user_message {
+  background-color: #323232;
+  padding: 10px 14px;
+  border-radius: 14px;
+  max-width: 70%;
+  width: fit-content;
+}
+
+/* ===== GPT Markdown Styling ===== */
+
+.gpt_message {
+  background-color: #1f1f1f;
+  padding: 10px 14px;
+  border-radius: 14px;
+  max-width: 70%;
+  width: fit-content;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+/* Headings */
+.gpt_message h1,
+.gpt_message h2,
+.gpt_message h3 {
+  margin: 0.5rem 0;
+  font-weight: 600;
+}
+
+/* Paragraph */
+.gpt_message p {
+  margin: 0.4rem 0;
+}
+
+/* Lists */
+.gpt_message ul,
+.gpt_message ol {
+  padding-left: 1.2rem;
+  margin: 0.4rem 0;
+}
+
+.gpt_message li {
+  margin-bottom: 0.2rem;
+}
+
+/* Inline code */
+.gpt_message code {
+  background-color: #2d2d2d;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+/* Code block */
+.gpt_message pre {
+  background-color: #0d1117;
+  padding: 0.75rem;
+  border-radius: 10px;
+  overflow-x: auto;
+  margin: 0.6rem 0;
+}
+
+/* Code inside block */
+.gpt_message pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+/* Blockquote */
+.gpt_message blockquote {
+  border-left: 3px solid #555;
+  padding-left: 0.6rem;
+  color: #ccc;
+  margin: 0.5rem 0;
+}
