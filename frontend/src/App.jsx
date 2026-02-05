@@ -11,6 +11,7 @@ function App() {
   const [currentThreadId, setCurrentThreadId] = useState(uuidv1());
   const [prevChats, setPrevChats] = useState([]); //stores all chats of curr threads
   const [newChat, setNewChat] = useState(true);
+  const [allThreads, setAllThreads] = useState([]);
 
   const providerValues = {
     prompt,
@@ -23,6 +24,8 @@ function App() {
     setNewChat,
     prevChats,
     setPrevChats,
+    allThreads,
+    setAllThreads,
   };
 
   return (

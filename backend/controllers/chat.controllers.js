@@ -26,7 +26,7 @@ export const testDb = async (req, res) => {
 //* =============== frtching threads =============== *//
 export const fetchingThreads = async (req, res) => {
   try {
-    const threads = await Thread.findOne({}).sort({ updatedAt: -1 }); //fetching thread in descending order
+    const threads = await Thread.find({}).sort({ updatedAt: -1 }); //fetching thread in descending order
     return res.json(threads);
   } catch (err) {
     console.error("error while fetching threads!", err.message);
