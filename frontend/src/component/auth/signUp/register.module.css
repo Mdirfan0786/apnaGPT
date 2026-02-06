@@ -1,0 +1,92 @@
+* {
+  margin: 0;
+}
+
+.main_container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  background-color: #212121;
+}
+
+/* nav logo */
+.nav_logo {
+  position: absolute;
+  top: 2%;
+  left: 2%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.container {
+  width: 30vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 1rem;
+  border: 1px solid #323232;
+}
+
+/* nav container */
+
+.container_nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* Container body */
+.container_body {
+  margin: 1rem 0;
+}
+
+.container_name_input {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+}
+
+.container_name_input > input,
+.container_Login_input > input {
+  padding-inline: 1.2rem;
+  padding-block: 0.8rem;
+  border-radius: 2rem;
+  border: 1px solid #323232;
+  background-color: transparent;
+}
+
+.container_Login_input {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.container_name_input > input:focus,
+.container_Login_input > input:focus {
+  outline: none;
+  border: 1px solid #a6baff;
+}
+
+.container_body > button {
+  width: 100%;
+  padding-inline: 1.2rem;
+  padding-block: 0.8rem;
+  border-radius: 2rem;
+  color: #0c1020;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* container foot */
+.container_foot {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}

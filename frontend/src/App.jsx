@@ -1,41 +1,64 @@
-import { useState } from "react";
-import styles from "./App.module.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { v1 as uuidv1 } from "uuid";
+import { useState } from "react";
+
 import ChatWindow from "./component/chatwindow/chatWindow";
 import Sidebar from "./component/sidebar/sidebar";
+import Register from "./component/auth/signUp/register";
+import Login from "./component/auth/sign/login";
 import { MyContext } from "./myContext";
+import styles from "./App.module.css";
+import ProtectedRoute from "./component/auth/protectedRoute/protected";
 
-function App() {
+function ChatLayout() {
   const [prompt, setPrompt] = useState("");
   const [reply, setReply] = useState(null);
   const [currentThreadId, setCurrentThreadId] = useState(uuidv1());
-  const [prevChats, setPrevChats] = useState([]); //stores all chats of curr threads
+  const [prevChats, setPrevChats] = useState([]);
   const [newChat, setNewChat] = useState(true);
   const [allThreads, setAllThreads] = useState([]);
 
-  const providerValues = {
-    prompt,
-    setPrompt,
-    reply,
-    setReply,
-    currentThreadId,
-    setCurrentThreadId,
-    newChat,
-    setNewChat,
-    prevChats,
-    setPrevChats,
-    allThreads,
-    setAllThreads,
-  };
-
   return (
     <div className={styles.appContainer}>
-      <MyContext.Provider value={providerValues}>
-        <Sidebar></Sidebar>
-        <ChatWindow></ChatWindow>
+      <MyContext.Provider
+        value={{
+          prompt,
+          setPrompt,
+          reply,
+          setReply,
+          currentThreadId,
+          setCurrentThreadId,
+          newChat,
+          setNewChat,
+          prevChats,
+          setPrevChats,
+          allThreads,
+          setAllThreads,
+        }}
+      >
+        <Sidebar />
+        <ChatWindow />
       </MyContext.Provider>
     </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <ChatLayout />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}
