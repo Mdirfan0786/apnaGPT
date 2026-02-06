@@ -3,14 +3,16 @@ import cors from "cors";
 import "dotenv/config";
 import mongoose from "mongoose";
 import chatRoutes from "./routes/chat.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use("/api", chatRoutes);
+app.use("/api", chatRoutes, userRoutes);
 
 const connectDB = async () => {
   try {

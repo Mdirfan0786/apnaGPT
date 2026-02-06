@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const MessageSchema = new mongoose.Schema(
   {
@@ -23,6 +23,11 @@ const ThreadSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     title: {
       type: String,
