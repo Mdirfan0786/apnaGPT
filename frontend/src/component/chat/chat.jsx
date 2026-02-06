@@ -49,11 +49,11 @@ const Chat = () => {
       {prevChats.slice(0, -1).map((chat, index) => (
         <div
           key={index}
-          className={chat.role === "user" ? styles.userDiv : styles.gptDiv}
+          className={chat.role === "User" ? styles.userDiv : styles.gptDiv}
         >
           <div
             className={
-              chat.role === "user" ? styles.user_message : styles.gpt_message
+              chat.role === "User" ? styles.user_message : styles.gpt_message
             }
           >
             {chat.role === "assistant" ? (

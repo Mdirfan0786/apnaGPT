@@ -44,6 +44,12 @@
   font-weight: 600;
 }
 
+.user_message,
+.gpt_message {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
 /* Paragraph */
 .gpt_message p {
   margin: 0.4rem 0;

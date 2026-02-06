@@ -77,6 +77,25 @@
   align-items: stretch;
 }
 
+/* ===== Chat Window Scrollbar ===== */
+
+.chatWindow_body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatWindow_body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chatWindow_body::-webkit-scrollbar-thumb {
+  background-color: #3a3a3a;
+  border-radius: 10px;
+}
+
+.chatWindow_body::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
 /* Chat Window Footer */
 .chatWindow_foot {
   display: flex;

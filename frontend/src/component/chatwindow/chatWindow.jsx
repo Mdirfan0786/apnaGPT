@@ -39,7 +39,7 @@ const ChatWindow = () => {
 
     setPrevChats((prev) => [
       ...prev,
-      { role: "user", content: prompt },
+      { role: "User", content: prompt },
       { role: "assistant", content: reply },
     ]);
 

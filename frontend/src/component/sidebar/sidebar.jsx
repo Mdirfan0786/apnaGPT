@@ -2,9 +2,19 @@ import React, { useContext, useEffect } from "react";
 import { MyContext } from "../../myContext";
 import styles from "./sidebar.module.css";
 import { clientServer } from "../../config/clientServer.jsx";
+import { v1 as uuidv1 } from "uuid";
 
 const sidebar = () => {
-  const { allThreads, setAllThreads, currentThreadId } = useContext(MyContext);
+  const {
+    allThreads,
+    setAllThreads,
+    currentThreadId,
+    setNewChat,
+    setPrompt,
+    setReply,
+    setCurrentThreadId,
+    setPrevChats,
+  } = useContext(MyContext);
 
   const getAllThreads = async () => {
     try {
@@ -23,12 +33,36 @@ const sidebar = () => {
     getAllThreads();
   }, [currentThreadId]);
 
+  const createNewChat = () => {
+    setNewChat(true);
+    setPrompt("");
+    setReply(null);
+    setCurrentThreadId(uuidv1());
+    setPrevChats([]);
+  };
+
+  // setting Words limit
   const truncateWords = (text, limit = 5) => {
     if (!text) return "";
     const words = text.split(" ");
     return words.length > limit
       ? words.slice(0, limit).join(" ") + "..."
       : text;
+  };
+
+  // getting and changing thread
+  const changeTread = async (newThreadId) => {
+    setCurrentThreadId(newThreadId);
+
+    try {
+      const response = await clientServer.get(`/threads/${newThreadId}`);
+      console.log(response.data);
+      setPrevChats(response.data);
+      setNewChat(false);
+      setReply(null);
+    } catch (err) {
+      console.error("error while fetching thread", err.message);
+    }
   };
 
   return (
@@ -39,7 +73,7 @@ const sidebar = () => {
           <img src="src/assets/apnaGPT_logo.png" alt="apnaGPT_logo" />
         </div>
 
-        <div className={styles.sidebar_nav_svg}>
+        <div onClick={createNewChat} className={styles.sidebar_nav_svg}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -71,10 +105,23 @@ const sidebar = () => {
 
         <ul className={styles.chat_history}>
           {allThreads.length === 0 ? (
-            <p style={{ color: "#aaa", padding: "0.5rem" }}>No chats yet</p>
+            <p
+              style={{
+                color: "#aaa",
+                padding: "0.5rem",
+                fontStyle: "italic",
+                fontSize: "0.8rem",
+                textAlign: "center",
+              }}
+            >
+              No chats yet
+            </p>
           ) : (
-            allThreads.map((thread, idx) => (
-              <li key={idx}>
+            allThreads.map((thread) => (
+              <li
+                key={thread.threadId}
+                onClick={(e) => changeTread(thread.threadId)}
+              >
                 <span>{truncateWords(thread.title, 5)}</span>
 
                 <div
