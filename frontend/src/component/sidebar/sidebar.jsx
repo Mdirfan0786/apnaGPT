@@ -65,6 +65,25 @@ const sidebar = () => {
     }
   };
 
+  // deleting thread
+  const deleteThread = async (newThreadId) => {
+    setCurrentThreadId(newThreadId);
+
+    try {
+      const response = await clientServer.delete(`/threads/${newThreadId}`);
+
+      setAllThreads((prev) =>
+        prev.filter((thread) => thread.threadId !== newThreadId),
+      );
+
+      if (newThreadId === currentThreadId) {
+        createNewChat();
+      }
+    } catch (err) {
+      console.error("error while deleting thread", err.message);
+    }
+  };
+
   return (
     <div className={styles.sidebarContainer}>
       {/* Sidebar Nav - rendering apnaGPT logo and new Chat */}
@@ -125,7 +144,10 @@ const sidebar = () => {
                 <span>{truncateWords(thread.title, 5)}</span>
 
                 <div
-                  onClick={() => alert("hey")}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteThread(thread.threadId);
+                  }}
                   className={styles.delete_chat}
                 >
                   <svg
