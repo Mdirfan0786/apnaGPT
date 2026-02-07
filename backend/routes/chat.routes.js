@@ -10,9 +10,9 @@ import {
 const router = express.Router();
 
 router.post("/test", testDb);
-router.get("/threads", fetchingThreads);
-router.get("/threads/:threadId", fetchingThreadsById);
-router.delete("/threads/:threadId", deletingThreadsById);
+router.get("/users/:userId/threads", fetchingThreads);
+router.get("/threads/:threadId/:userId", fetchingThreadsById);
+router.delete("/threads/:threadId/:userId", deletingThreadsById);
 router.post("/chat", chat);
 
 export default router;

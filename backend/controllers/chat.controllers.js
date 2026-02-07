@@ -1,32 +1,63 @@
 import Thread from "../models/Thread.model.js";
-import { randomUUID } from "crypto";
+import { v4 as uuidv4 } from "uuid";
 import getOpenAIAPIResponse from "../utils/openAi.utils.js";
+import User from "../models/User.model.js";
 
 //* =============== testing dabase by uploading thread =============== *//
 export const testDb = async (req, res) => {
+  const { userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ error: "userId is required" });
+  }
+
   try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     const thread = new Thread({
-      threadId: randomUUID(),
-      title: "New Thread!",
+      threadId: uuidv4(),
+      owner: user._id,
+      title: "New Thread",
       messages: [],
     });
 
-    const response = await thread.save();
+    const savedThread = await thread.save();
+
+    user.threads.push(savedThread._id);
+    await user.save();
 
     return res.status(201).json({
       message: "Thread created successfully",
-      data: response,
+      data: savedThread,
     });
   } catch (err) {
-    console.error("DB ERROR:", err);
-    return res.status(500).json({ error: "failed to save data in db" });
+    console.error("DB ERROR:", err.message);
+    return res.status(500).json({ error: "Failed to save data in DB" });
   }
 };
 
 //* =============== frtching threads =============== *//
 export const fetchingThreads = async (req, res) => {
+  const { userId } = req.params;
+
+  if (!userId) {
+    return res.status(400).json({ error: "userId is required" });
+  }
+
   try {
-    const threads = await Thread.find({}).sort({ updatedAt: -1 }); //fetching thread in descending order
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const threads = await Thread.find({ owner: user._id }).sort({
+      updatedAt: -1,
+    }); //fetching thread in descending order
     return res.json(threads);
   } catch (err) {
     console.error("error while fetching threads!", err.message);
@@ -36,39 +67,59 @@ export const fetchingThreads = async (req, res) => {
 
 //* =============== frtching thread by id =============== *//
 export const fetchingThreadsById = async (req, res) => {
-  const { threadId } = req.params;
-  console.log(threadId);
-  try {
-    const thread = await Thread.findOne({ threadId });
+  const { threadId, userId } = req.params;
 
-    if (!thread) return res.status(404).json({ message: "thread not found!" });
-    return res.json(thread.messages);
+  try {
+    const thread = await Thread.findOne({
+      threadId,
+      owner: userId,
+    });
+
+    if (!thread) {
+      return res.status(404).json({ message: "thread not found!" });
+    }
+
+    return res.json({
+      title: thread.title,
+      messages: thread.messages,
+    });
   } catch (err) {
-    console.error("error while fetching threads by id!", err.message);
+    console.error("error while fetching thread!", err.message);
     return res.status(500).json({ error: "Server Error!" });
   }
 };
 
 //* =============== deleting thread by id =============== *//
 export const deletingThreadsById = async (req, res) => {
-  const { threadId } = req.params;
+  const { threadId, userId } = req.params;
+
   try {
-    const deleteThread = await Thread.findOneAndDelete({ threadId });
+    const deletedThread = await Thread.findOneAndDelete({
+      threadId,
+      owner: userId,
+    });
 
-    if (!deleteThread)
+    if (!deletedThread) {
       return res.status(404).json({ message: "thread not found!" });
+    }
 
-    return res.status(200).json({ message: "Thread deleted!" });
+    await User.updateOne(
+      { _id: userId },
+      { $pull: { threads: deletedThread._id } },
+    );
+
+    return res.status(200).json({ message: "Thread deleted successfully" });
   } catch (err) {
     console.error("error while deleting thread!", err.message);
     return res.status(500).json({ error: "Server Error!" });
   }
 };
 
-//* =============== deleting thread by id =============== *//
+//* =============== chat =============== *//
 export const chat = async (req, res) => {
-  const { threadId, message } = req.body;
-  if (!threadId || !message)
+  const { threadId, message, userId } = req.body;
+
+  if (!threadId || !message || !userId)
     return res.status(400).json({ message: "missing required field!" });
 
   try {
@@ -77,6 +128,7 @@ export const chat = async (req, res) => {
     if (!thread) {
       thread = new Thread({
         threadId,
+        owner: userId,
         title: message,
         messages: [{ role: "User", content: message }],
       });
@@ -90,8 +142,8 @@ export const chat = async (req, res) => {
       role: "assistant",
       content: aiResponse.reply,
     });
-    thread.updatedAt = new Date();
 
+    thread.updatedAt = new Date();
     await thread.save();
 
     return res.json({ reply: aiResponse.reply });

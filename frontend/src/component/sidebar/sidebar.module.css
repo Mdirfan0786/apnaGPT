@@ -32,7 +32,7 @@
 }
 
 .sidebar_nav_svg > svg {
-  height: 1.7rem;
+  height: 2.5rem;
   padding: 0.5rem;
   border-radius: 50%;
   cursor: pointer;
@@ -115,6 +115,7 @@
 /* sidebar_foot */
 
 .sidebar_foot {
+  padding: 1rem;
   flex-shrink: 0;
   border-top: 1px solid #fff;
   text-align: center;

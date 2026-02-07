@@ -54,8 +54,12 @@ const sidebar = () => {
   const changeTread = async (newThreadId) => {
     setCurrentThreadId(newThreadId);
 
+    const userId = localStorage.getItem("userId");
+
     try {
-      const response = await clientServer.get(`/threads/${newThreadId}`);
+      const response = await clientServer.get(`/threads/${newThreadId}`, {
+        userId,
+      });
       console.log(response.data);
       setPrevChats(response.data);
       setNewChat(false);
