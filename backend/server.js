@@ -19,7 +19,8 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api", chatRoutes, userRoutes);
+app.use("/api", chatRoutes);
+app.use("/api", userRoutes);
 
 const startServer = async () => {
   try {
