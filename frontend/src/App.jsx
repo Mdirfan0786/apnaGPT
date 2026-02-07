@@ -17,6 +17,9 @@ function ChatLayout() {
   const [prevChats, setPrevChats] = useState([]);
   const [newChat, setNewChat] = useState(true);
   const [allThreads, setAllThreads] = useState([]);
+  const [refreshThreads, setRefreshThreads] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [name, setName] = useState(localStorage.getItem("name"));
 
   return (
     <div className={styles.appContainer}>
@@ -34,6 +37,12 @@ function ChatLayout() {
           setPrevChats,
           allThreads,
           setAllThreads,
+          refreshThreads,
+          setRefreshThreads,
+          isSidebarOpen,
+          setIsSidebarOpen,
+          name,
+          setName,
         }}
       >
         <Sidebar />

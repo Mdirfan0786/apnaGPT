@@ -13,9 +13,9 @@ const ChatWindow = () => {
     reply,
     setReply,
     currentThreadId,
-    setCurrentThreadId,
-    prevChats,
     setPrevChats,
+    setRefreshThreads,
+    name,
   } = useContext(MyContext);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -26,13 +26,18 @@ const ChatWindow = () => {
   // sending request to API
   const getReply = async () => {
     setLoading(true);
+
+    const userId = localStorage.getItem("userId");
+
     try {
       const response = await clientServer.post("/chat", {
+        userId: userId,
         message: prompt,
         threadId: currentThreadId,
       });
       console.log(response.data.reply);
       setReply(response.data.reply);
+      setRefreshThreads((prev) => !prev);
     } catch (err) {
       console.error(err.message);
     }
@@ -76,6 +81,7 @@ const ChatWindow = () => {
 
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
+    localStorage.removeItem("name");
 
     navigate("/login");
   };
@@ -110,6 +116,9 @@ const ChatWindow = () => {
           className={styles.chatWindow_nav_right}
           onClick={handleProfileClick}
         >
+          <div className={styles.user_Details}>
+            <p>Hey, {name} 👋</p>
+          </div>
           <span>
             <svg
               xmlns="http://www.w3.org/2000/svg"

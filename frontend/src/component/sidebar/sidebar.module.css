@@ -1,42 +1,35 @@
+/* ================= SIDEBAR WRAPPER ================= */
 .sidebarContainer {
   height: 100vh;
-  width: 20vw;
+  width: 280px; /* ✅ fixed width > vw */
+  min-width: 260px;
+  max-width: 320px;
+
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 0 0.5rem;
+  gap: 0.75rem;
+
+  padding: 0.5rem;
   background-color: #181818;
+  border-right: 1px solid #2a2a2a;
 }
 
-/* Sidebar Container */
-
+/* ================= NAV ================= */
 .sidebar_nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-shrink: 0;
-  padding-inline: 0.5rem;
-  padding-block: 0.3rem;
-  margin-top: 0.5rem;
-  border-radius: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 0.6rem;
 }
 
-.sidebar_nav_img > img {
-  width: 2rem;
-  height: 2rem;
+.sidebar_nav_img img {
+  width: 2.2rem;
+  height: 2.2rem;
   object-fit: cover;
   border-radius: 50%;
   background-color: #fff;
-  display: block;
   cursor: pointer;
-}
-
-.sidebar_nav_svg > svg {
-  height: 2.5rem;
-  padding: 0.5rem;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
 }
 
 .sidebar_nav_svg {
@@ -44,17 +37,26 @@
   align-items: center;
 }
 
-.sidebar_nav_svg > svg:hover {
+.sidebar_nav_svg svg {
+  height: 2.5rem;
+  padding: 0.4rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar_nav_svg svg:hover {
   background-color: #303030;
 }
 
-/* sidebar main */
+/* ================= MAIN ================= */
 .sidebar_main {
   flex: 1;
   overflow-y: auto;
-  min-height: 0;
+  padding-right: 0.2rem;
 }
 
+/* scrollbar */
 .sidebar_main::-webkit-scrollbar {
   width: 6px;
 }
@@ -64,59 +66,78 @@
   border-radius: 10px;
 }
 
-/* sidebar main - Chat history */
-
+/* ================= CHAT LIST ================= */
 .chat_history {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   padding: 0;
   margin: 0;
-  width: 100%;
-  box-sizing: border-box;
 }
 
-.chat_history > li {
-  font-size: 0.875rem;
-  list-style-type: none;
-  padding-inline: 0.5rem;
-  padding-block: 0.5rem;
+/* chat item */
+.chat_history li {
+  list-style: none;
+  font-size: 0.85rem;
+  padding: 0.65rem 0.75rem;
   border-radius: 0.5rem;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  color: #e5e5e5;
+  transition: background-color 0.15s ease;
 }
 
-.chat_history > li:hover {
+.chat_history li:hover {
+  background-color: #2a2a2a;
+}
+
+/* active thread */
+.activeThread {
   background-color: #303030;
 }
 
+/* ================= DELETE ICON ================= */
 .delete_chat {
-  display: none;
   opacity: 0;
-  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.15s ease;
 }
 
-.chat_history > li:hover .delete_chat {
-  display: flex;
+.chat_history li:hover .delete_chat {
   opacity: 1;
 }
 
-.delete_chat > svg {
+.delete_chat svg {
   height: 1rem;
 }
 
-.delete_chat > svg > path {
-  color: #ff0000;
+.delete_chat svg path {
+  color: #ff4d4d;
 }
 
-/* sidebar_foot */
-
+/* ================= FOOTER ================= */
 .sidebar_foot {
-  padding: 1rem;
-  flex-shrink: 0;
-  border-top: 1px solid #fff;
+  padding: 0.75rem;
+  font-size: 0.75rem;
+  color: #9ca3af;
   text-align: center;
+  border-top: 1px solid #2a2a2a;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 900px) {
+  .sidebarContainer {
+    width: 240px;
+  }
+}
+
+@media (max-width: 700px) {
+  .sidebarContainer {
+    display: none;
+  }
 }

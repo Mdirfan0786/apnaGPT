@@ -4,7 +4,7 @@ import styles from "./sidebar.module.css";
 import { clientServer } from "../../config/clientServer.jsx";
 import { v1 as uuidv1 } from "uuid";
 
-const sidebar = () => {
+const Sidebar = () => {
   const {
     allThreads,
     setAllThreads,
@@ -14,11 +14,16 @@ const sidebar = () => {
     setReply,
     setCurrentThreadId,
     setPrevChats,
+    refreshThreads,
+    isSidebarOpen,
+    setIsSidebarOpen,
   } = useContext(MyContext);
 
   const getAllThreads = async () => {
+    const userId = localStorage.getItem("userId");
+
     try {
-      const response = await clientServer.get("/threads");
+      const response = await clientServer.get(`/users/${userId}/threads`);
       const filteredData = response.data.map((thread) => ({
         threadId: thread.threadId,
         title: thread.title,
@@ -31,7 +36,7 @@ const sidebar = () => {
 
   useEffect(() => {
     getAllThreads();
-  }, [currentThreadId]);
+  }, [refreshThreads]);
 
   const createNewChat = () => {
     setNewChat(true);
@@ -51,17 +56,18 @@ const sidebar = () => {
   };
 
   // getting and changing thread
-  const changeTread = async (newThreadId) => {
+  const changeThread = async (newThreadId) => {
     setCurrentThreadId(newThreadId);
 
     const userId = localStorage.getItem("userId");
 
     try {
-      const response = await clientServer.get(`/threads/${newThreadId}`, {
-        userId,
-      });
+      const response = await clientServer.get(
+        `/threads/${newThreadId}/${userId}`,
+      );
+
       console.log(response.data);
-      setPrevChats(response.data);
+      setPrevChats(response.data.messages);
       setNewChat(false);
       setReply(null);
     } catch (err) {
@@ -73,8 +79,12 @@ const sidebar = () => {
   const deleteThread = async (newThreadId) => {
     setCurrentThreadId(newThreadId);
 
+    const userId = localStorage.getItem("userId");
+
     try {
-      const response = await clientServer.delete(`/threads/${newThreadId}`);
+      const response = await clientServer.delete(
+        `/threads/${newThreadId}/${userId}`,
+      );
 
       setAllThreads((prev) =>
         prev.filter((thread) => thread.threadId !== newThreadId),
@@ -121,6 +131,7 @@ const sidebar = () => {
             color: "#afafaf",
             paddingInline: "0.5rem",
             fontSize: "1rem",
+            marginBlock: "1rem",
           }}
         >
           Your Chats!
@@ -143,7 +154,10 @@ const sidebar = () => {
             allThreads.map((thread) => (
               <li
                 key={thread.threadId}
-                onClick={(e) => changeTread(thread.threadId)}
+                className={
+                  thread.threadId === currentThreadId ? styles.activeThread : ""
+                }
+                onClick={(e) => changeThread(thread.threadId)}
               >
                 <span>{truncateWords(thread.title, 5)}</span>
 
@@ -183,4 +197,4 @@ const sidebar = () => {
   );
 };
 
-export default sidebar;
+export default Sidebar;

@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./login.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { clientServer } from "../../../config/clientServer";
+import { MyContext } from "../../../myContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { setName } = useContext(MyContext);
 
   const navigate = useNavigate();
 
@@ -28,14 +31,11 @@ const Login = () => {
 
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("userId", res.data.user.id);
+      localStorage.setItem("name", res.data.user.name);
 
       navigate("/");
     } catch (err) {
-      alert(
-        err.response?.data?.error ||
-          err.response?.data?.message ||
-          "Login failed",
-      );
+      alert(err.message || "Login failed");
     } finally {
       setLoading(false);
     }

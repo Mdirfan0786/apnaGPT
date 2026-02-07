@@ -98,3 +98,14 @@ export const login = async (req, res) => {
     return res.status(500).json({ message: "Server Error!" });
   }
 };
+
+//* =============== login User =============== *//
+// export const userDetails = async (req, res) => {
+//   const { userId } = req.params;
+
+//   try {
+//     const user =
+//   } catch (err) {
+//     console.log("error while fetching user details!", err.message)
+//   }
+// };
