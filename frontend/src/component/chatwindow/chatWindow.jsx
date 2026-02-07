@@ -4,6 +4,7 @@ import Chat from "../chat/chat.jsx";
 import { MyContext } from "../../myContext.jsx";
 import { clientServer } from "../../config/clientServer.jsx";
 import { ScaleLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 
 const ChatWindow = () => {
   const {
@@ -19,6 +20,8 @@ const ChatWindow = () => {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  const navigate = useNavigate();
 
   // sending request to API
   const getReply = async () => {
@@ -65,6 +68,17 @@ const ChatWindow = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // handling logout
+  const handleLogout = (e) => {
+    e.preventDefault();
+    setIsOpen(false);
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+
+    navigate("/login");
+  };
 
   return (
     <div className={styles.chatWindow_Container}>
@@ -151,7 +165,7 @@ const ChatWindow = () => {
           </div>
           <div
             className={`${styles.dropDownItem} ${styles.logout}`}
-            onClick={() => setIsOpen(false)}
+            onClick={handleLogout}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

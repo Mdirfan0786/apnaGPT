@@ -23,12 +23,15 @@
 }
 
 .container {
-  width: 30vw;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 1rem;
   border: 1px solid #323232;
+  box-sizing: border-box;
 }
 
 /* nav container */
@@ -44,6 +47,9 @@
 /* Container body */
 .container_body {
   margin: 1rem 0;
+  width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
 }
 
 .container_name_input {
@@ -54,6 +60,8 @@
 
 .container_name_input > input,
 .container_Login_input > input {
+  width: 100%;
+  box-sizing: border-box;
   padding-inline: 1.2rem;
   padding-block: 0.8rem;
   border-radius: 2rem;
@@ -85,8 +93,26 @@
   cursor: pointer;
 }
 
+.container_body > button:hover {
+  color: #000;
+  box-shadow:
+    rgba(136, 165, 191, 0.48) 6px 2px 16px 0px,
+    rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+}
+
 /* container foot */
 .container_foot {
   padding: 1rem;
   margin-bottom: 1rem;
+}
+
+/* responsive */
+@media (max-width: 600px) {
+  .container_name_input {
+    flex-direction: column;
+  }
+
+  .container {
+    border: none;
+  }
 }
