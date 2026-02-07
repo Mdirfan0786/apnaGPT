@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { v1 as uuidv1 } from "uuid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import ChatWindow from "./component/chatwindow/chatWindow";
 import Sidebar from "./component/sidebar/sidebar";
@@ -19,7 +19,11 @@ function ChatLayout() {
   const [allThreads, setAllThreads] = useState([]);
   const [refreshThreads, setRefreshThreads] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [name, setName] = useState(localStorage.getItem("name"));
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    setName(localStorage.getItem("name"));
+  }, []);
 
   return (
     <div className={styles.appContainer}>

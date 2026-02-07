@@ -1,7 +1,7 @@
 /* ================= SIDEBAR WRAPPER ================= */
 .sidebarContainer {
   height: 100vh;
-  width: 280px; /* ✅ fixed width > vw */
+  width: 280px;
   min-width: 260px;
   max-width: 320px;
 
@@ -129,15 +129,31 @@
   border-top: 1px solid #2a2a2a;
 }
 
-/* ================= RESPONSIVE ================= */
-@media (max-width: 900px) {
-  .sidebarContainer {
-    width: 240px;
-  }
+/* ===== BACKDROP ===== */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1000;
 }
 
-@media (max-width: 700px) {
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
   .sidebarContainer {
-    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .open {
+    transform: translateX(0);
+  }
+
+  .delete_chat {
+    opacity: 1;
   }
 }

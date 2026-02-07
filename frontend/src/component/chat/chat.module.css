@@ -1,61 +1,66 @@
+/* ================= CHAT WRAPPER ================= */
 .chats {
-  width: 700px;
+  max-width: 700px;
+  width: 100%;
   margin: 0 auto;
   padding: 1rem;
 }
 
-.userDiv {
+/* ================= MESSAGE ROW ================= */
+.userDiv,
+.gptDiv {
   display: flex;
-  justify-content: flex-end;
   margin-bottom: 0.6rem;
+}
+
+/* alignment */
+.userDiv {
+  justify-content: flex-end;
 }
 
 .gptDiv {
-  display: flex;
   justify-content: flex-start;
-  margin-bottom: 0.6rem;
 }
 
-.user_message {
-  background-color: #323232;
-  padding: 10px 14px;
-  border-radius: 14px;
-  max-width: 70%;
-  width: fit-content;
-}
-
-/* ===== GPT Markdown Styling ===== */
-
-.gpt_message {
-  background-color: #1f1f1f;
-  padding: 10px 14px;
-  border-radius: 14px;
-  max-width: 70%;
-  width: fit-content;
-  line-height: 1.6;
-  font-size: 0.9rem;
-}
-
-/* Headings */
-.gpt_message h1,
-.gpt_message h2,
-.gpt_message h3 {
-  margin: 0.5rem 0;
-  font-weight: 600;
-}
-
+/* ================= MESSAGE BUBBLES ================= */
 .user_message,
 .gpt_message {
+  max-width: 75%;
+  width: fit-content;
+  padding: 10px 14px;
+  border-radius: 14px;
   word-break: break-word;
   overflow-wrap: anywhere;
 }
 
-/* Paragraph */
+/* user */
+.user_message {
+  background-color: #323232;
+}
+
+/* gpt */
+.gpt_message {
+  background-color: #1f1f1f;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+/* ================= MARKDOWN ================= */
+
+/* headings */
+.gpt_message h1,
+.gpt_message h2,
+.gpt_message h3 {
+  margin: 0.4rem 0;
+  font-weight: 600;
+}
+
+/* paragraph */
 .gpt_message p {
   margin: 0.4rem 0;
 }
 
-/* Lists */
+/* lists */
 .gpt_message ul,
 .gpt_message ol {
   padding-left: 1.2rem;
@@ -66,7 +71,7 @@
   margin-bottom: 0.2rem;
 }
 
-/* Inline code */
+/* inline code */
 .gpt_message code {
   background-color: #2d2d2d;
   padding: 2px 6px;
@@ -74,7 +79,7 @@
   font-size: 0.85rem;
 }
 
-/* Code block */
+/* code block */
 .gpt_message pre {
   background-color: #0d1117;
   padding: 0.75rem;
@@ -83,17 +88,44 @@
   margin: 0.6rem 0;
 }
 
-/* Code inside block */
+/* code inside block */
 .gpt_message pre code {
   background: none;
   padding: 0;
   font-size: 0.85rem;
 }
 
-/* Blockquote */
+/* blockquote */
 .gpt_message blockquote {
   border-left: 3px solid #555;
   padding-left: 0.6rem;
   color: #ccc;
   margin: 0.5rem 0;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+  .chats {
+    padding: 0.75rem;
+  }
+
+  .user_message,
+  .gpt_message {
+    max-width: 90%;
+    font-size: 0.85rem;
+  }
+}
+
+/* ================= SMALL MOBILE ================= */
+@media (max-width: 480px) {
+  .chats {
+    padding: 0.5rem;
+  }
+
+  .user_message,
+  .gpt_message {
+    max-width: 95%;
+    padding: 8px 12px;
+    border-radius: 12px;
+  }
 }
