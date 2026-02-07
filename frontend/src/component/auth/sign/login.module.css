@@ -1,0 +1,173 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* ================= MAIN WRAPPER ================= */
+.main_container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  background-color: #212121;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+
+/* ================= LOGO ================= */
+.nav_logo {
+  position: absolute;
+  top: 2%;
+  left: 2%;
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+/* ================= CARD ================= */
+.container {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 1rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  border-radius: 1rem;
+  border: 1px solid #323232;
+  background-color: #181818;
+
+  /* 🔥 PERFECT HEIGHT CONTROL */
+  min-height: clamp(420px, 65vh, 520px);
+}
+
+/* ================= NAV ================= */
+.container_nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding-top: 2rem;
+  text-align: center;
+}
+
+.container_nav h1 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.container_nav p {
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+/* ================= BODY ================= */
+.container_body {
+  flex: 1;
+  width: 100%;
+  padding: 0 1.2rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* ================= INPUTS ================= */
+.container_Login_input {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.container_Login_input > input {
+  width: 100%;
+  padding: 0.9rem 1.3rem;
+  border-radius: 2rem;
+  border: 1px solid #323232;
+  background-color: transparent;
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.container_Login_input > input::placeholder {
+  color: #9ca3af;
+}
+
+.container_Login_input > input:focus {
+  outline: none;
+  border-color: #10a37f;
+  box-shadow: 0 0 0 2px rgba(16, 163, 127, 0.2);
+}
+
+/* ================= BUTTON ================= */
+.container_body > button {
+  width: 100%;
+  padding: 0.9rem 1.3rem;
+  border-radius: 2rem;
+  background-color: #10a37f;
+  color: #0c1020;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition:
+    transform 0.1s ease,
+    box-shadow 0.2s ease;
+}
+
+.container_body > button:hover {
+  box-shadow:
+    rgba(136, 165, 191, 0.3) 6px 2px 16px 0px,
+    rgba(255, 255, 255, 0.2) -6px -2px 16px 0px;
+}
+
+.container_body > button:active {
+  transform: scale(0.98);
+}
+
+/* ================= FOOTER ================= */
+.container_foot {
+  padding-bottom: 1.8rem;
+  font-size: 0.85rem;
+  color: #9ca3af;
+  text-align: center;
+}
+
+.container_foot a {
+  color: #10a37f;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.container_foot a:hover {
+  text-decoration: underline;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 600px) {
+  .container {
+    min-height: auto;
+    border: none;
+    background-color: transparent;
+  }
+
+  .container_body {
+    justify-content: flex-start;
+  }
+
+  .nav_logo {
+    font-size: 1.3rem;
+  }
+}
