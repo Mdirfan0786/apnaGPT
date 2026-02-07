@@ -16,22 +16,25 @@ app.use(
   }),
 );
 
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", chatRoutes, userRoutes);
 
-const connectDB = async () => {
+const startServer = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, { dbName: "apnaGPT" });
-    console.log("Connected to db");
+    await mongoose.connect(process.env.MONGO_URI, {
+      dbName: "apnaGPT",
+    });
+    console.log("Connected to MongoDB");
+
+    app.listen(PORT, () => {
+      console.log(`Server running on PORT ${PORT}`);
+    });
   } catch (err) {
-    console.log("unable to connect Db", err.message);
+    console.error("DB connection failed:", err.message);
+    process.exit(1);
   }
 };
 
-app.listen(PORT, () => {
-  console.log(`Server listening on PORT: ${PORT}`);
-  connectDB();
-});
+startServer();

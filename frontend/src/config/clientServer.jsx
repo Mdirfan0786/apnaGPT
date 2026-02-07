@@ -4,4 +4,5 @@ export const BASE_URL = import.meta.env.VITE_NEXT_PUBLIC_BASE_URL;
 
 export const clientServer = axios.create({
   baseURL: BASE_URL,
+  withCredentials: true,
 });
