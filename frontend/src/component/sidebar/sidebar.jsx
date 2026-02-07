@@ -117,7 +117,7 @@ const Sidebar = () => {
         {/* Sidebar Nav - rendering apnaGPT logo and new Chat */}
         <div className={styles.sidebar_nav}>
           <div className={styles.sidebar_nav_img}>
-            <img src="src/assets/apnaGPT_logo.png" alt="apnaGPT_logo" />
+            <img src="/apnaGPT_logo.png" alt="apnaGPT_logo" />
           </div>
 
           <div onClick={createNewChat} className={styles.sidebar_nav_svg}>
