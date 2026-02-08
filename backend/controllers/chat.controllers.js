@@ -123,6 +123,12 @@ export const chat = async (req, res) => {
     return res.status(400).json({ message: "missing required field!" });
 
   try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     let thread = await Thread.findOne({ threadId });
 
     if (!thread) {
@@ -144,7 +150,10 @@ export const chat = async (req, res) => {
     });
 
     thread.updatedAt = new Date();
-    await thread.save();
+    const savedThread = await thread.save();
+
+    user.threads.push(savedThread._id);
+    await user.save();
 
     return res.json({ reply: aiResponse.reply });
   } catch (err) {
