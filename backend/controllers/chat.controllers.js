@@ -1,6 +1,6 @@
 import Thread from "../models/Thread.model.js";
 import getOpenAIAPIResponse from "../utils/openAi.utils.js";
-import User from "../models/user.model.js";
+import User from "../models/User.model.js";
 
 //* =============== frtching threads =============== *//
 export const fetchingThreads = async (req, res, next) => {
