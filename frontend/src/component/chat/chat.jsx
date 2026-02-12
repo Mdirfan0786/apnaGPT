@@ -36,7 +36,7 @@ const Chat = () => {
       if (index >= words.length) {
         clearInterval(interval);
       }
-    }, 30);
+    }, 15);
 
     return () => clearInterval(interval);
   }, [lastMessage]);
