@@ -4,15 +4,14 @@ import {
   deletingThreadsById,
   fetchingThreads,
   fetchingThreadsById,
-  testDb,
 } from "../controllers/chat.controllers.js";
+import { isLoggedIn } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/test", testDb);
-router.get("/users/:userId/threads", fetchingThreads);
-router.get("/threads/:threadId/:userId", fetchingThreadsById);
-router.delete("/threads/:threadId/:userId", deletingThreadsById);
-router.post("/chat", chat);
+router.get("/threads", isLoggedIn, fetchingThreads);
+router.get("/threads/:threadId", isLoggedIn, fetchingThreadsById);
+router.delete("/threads/:threadId", isLoggedIn, deletingThreadsById);
+router.post("/chat", isLoggedIn, chat);
 
 export default router;

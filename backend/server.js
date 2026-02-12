@@ -22,6 +22,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api", chatRoutes);
 app.use("/api", userRoutes);
 
+// global error handler
+app.use((err, req, res, next) => {
+  console.error("ERROR:", err.message);
+
+  res.status(err.statusCode || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+  });
+});
+
 const startServer = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {

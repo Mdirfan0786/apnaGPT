@@ -1,51 +1,44 @@
-import User from "../models/User.model.js";
+import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
-import crypto from "crypto";
 import jwt from "jsonwebtoken";
 
 //* =============== Register new User =============== *//
-export const register = async (req, res) => {
-  const { email, name, username, password } = req.body;
-
-  // Validation
-  if (!email || !name || !username || !password) {
-    return res.status(400).json({ error: "all fiels are required!" });
-  }
-
+export const register = async (req, res, next) => {
   try {
-    // checking existing user
+    const { email, name, username, password } = req.body;
+
+    if (!email || !name || !username || !password) {
+      const error = new Error("All fields are required!");
+      error.statusCode = 400;
+      throw error;
+    }
+
     const existingUser = await User.findOne({
       $or: [{ email }, { username }],
     });
 
     if (existingUser) {
-      return res.status(400).json({ error: "User already exist!" });
+      const error = new Error("User already exists!");
+      error.statusCode = 400;
+      throw error;
     }
 
-    // Hash Password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({
+    const newUser = await User.create({
       name,
       username,
       email,
       password: hashedPassword,
     });
 
-    // Generating Jwt
-    const token = jwt.sign(
-      { userId: newUser._id },
-      process.env.JWT_SECRET_KEY,
-      { expiresIn: process.env.JWT_EXPIRES_IN },
-    );
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "1h",
+    });
 
-    newUser.token = token;
-    await newUser.save();
-
-    // Response
-    return res.status(201).json({
-      message: "User registered!",
+    res.status(201).json({
+      success: true,
+      message: "User registered successfully",
       token,
       user: {
         id: newUser._id,
@@ -55,57 +48,52 @@ export const register = async (req, res) => {
       },
     });
   } catch (err) {
-    console.error("Unable to register new User!", err.message);
-    return res.status(500).json({ message: "Server Error!" });
+    next(err);
   }
 };
 
 //* =============== login User =============== *//
-export const login = async (req, res) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({ message: "All fields are required!" });
-  }
-
+export const login = async (req, res, next) => {
   try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      const error = new Error("All fields are required!");
+      error.statusCode = 400;
+      throw error;
+    }
+
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ error: "User not found!" });
+      const error = new Error("Invalid Credentials!");
+      error.statusCode = 400;
+      throw error;
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid Credentials!" });
+      const error = new Error("Invalid Credentials!");
+      error.statusCode = 400;
+      throw error;
     }
 
-    const token = crypto.randomBytes(32).toString("hex");
-    await User.updateOne({ _id: user._id }, { $set: { token: token } });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "1h",
+    });
 
     res.json({
+      success: true,
       token,
       user: {
         id: user._id,
         name: user.name,
-        email: user.email,
         username: user.username,
+        email: user.email,
       },
     });
   } catch (err) {
-    console.error("Unable to login!", err.message);
-    return res.status(500).json({ message: "Server Error!" });
+    next(err);
   }
 };
-
-//* =============== login User =============== *//
-// export const userDetails = async (req, res) => {
-//   const { userId } = req.params;
-
-//   try {
-//     const user =
-//   } catch (err) {
-//     console.log("error while fetching user details!", err.message)
-//   }
-// };

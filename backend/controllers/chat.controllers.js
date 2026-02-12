@@ -1,106 +1,63 @@
 import Thread from "../models/Thread.model.js";
 import { v4 as uuidv4 } from "uuid";
 import getOpenAIAPIResponse from "../utils/openAi.utils.js";
-import User from "../models/User.model.js";
-
-//* =============== testing dabase by uploading thread =============== *//
-export const testDb = async (req, res) => {
-  const { userId } = req.body;
-
-  if (!userId) {
-    return res.status(400).json({ error: "userId is required" });
-  }
-
-  try {
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    const thread = new Thread({
-      threadId: uuidv4(),
-      owner: user._id,
-      title: "New Thread",
-      messages: [],
-    });
-
-    const savedThread = await thread.save();
-
-    user.threads.push(savedThread._id);
-    await user.save();
-
-    return res.status(201).json({
-      message: "Thread created successfully",
-      data: savedThread,
-    });
-  } catch (err) {
-    console.error("DB ERROR:", err.message);
-    return res.status(500).json({ error: "Failed to save data in DB" });
-  }
-};
+import User from "../models/user.model.js";
 
 //* =============== frtching threads =============== *//
-export const fetchingThreads = async (req, res) => {
-  const { userId } = req.params;
-
-  if (!userId) {
-    return res.status(400).json({ error: "userId is required" });
-  }
-
+export const fetchingThreads = async (req, res, next) => {
   try {
-    const user = await User.findById(userId);
+    const userId = req.user.id;
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    const threads = await Thread.find({ owner: user._id }).sort({
+    const threads = await Thread.find({ owner: userId }).sort({
       updatedAt: -1,
-    }); //fetching thread in descending order
-    return res.json(threads);
+    });
+
+    res.json(threads);
   } catch (err) {
-    console.error("error while fetching threads!", err.message);
-    return res.status(500).json({ error: "Server Error!" });
+    next(err);
   }
 };
 
 //* =============== frtching thread by id =============== *//
-export const fetchingThreadsById = async (req, res) => {
-  const { threadId, userId } = req.params;
-
+export const fetchingThreadsById = async (req, res, next) => {
   try {
+    const { threadId } = req.params;
+
     const thread = await Thread.findOne({
       threadId,
-      owner: userId,
+      owner: req.user.id,
     });
 
     if (!thread) {
-      return res.status(404).json({ message: "thread not found!" });
+      const error = new Error("Thread not found");
+      error.statusCode = 404;
+      throw error;
     }
 
-    return res.json({
+    res.json({
       title: thread.title,
       messages: thread.messages,
     });
   } catch (err) {
-    console.error("error while fetching thread!", err.message);
-    return res.status(500).json({ error: "Server Error!" });
+    next(err);
   }
 };
 
 //* =============== deleting thread by id =============== *//
-export const deletingThreadsById = async (req, res) => {
-  const { threadId, userId } = req.params;
-
+export const deletingThreadsById = async (req, res, next) => {
   try {
+    const { threadId } = req.params;
+    const userId = req.user._id;
+
     const deletedThread = await Thread.findOneAndDelete({
       threadId,
       owner: userId,
     });
 
     if (!deletedThread) {
-      return res.status(404).json({ message: "thread not found!" });
+      const error = new Error("Thread not found or not authorized");
+      error.statusCode = 404;
+      throw error;
     }
 
     await User.updateOne(
@@ -108,38 +65,48 @@ export const deletingThreadsById = async (req, res) => {
       { $pull: { threads: deletedThread._id } },
     );
 
-    return res.status(200).json({ message: "Thread deleted successfully" });
+    res.status(200).json({
+      success: true,
+      message: "Thread deleted successfully",
+    });
   } catch (err) {
-    console.error("error while deleting thread!", err.message);
-    return res.status(500).json({ error: "Server Error!" });
+    next(err);
   }
 };
 
 //* =============== chat =============== *//
-export const chat = async (req, res) => {
-  const { threadId, message, userId } = req.body;
-
-  if (!threadId || !message || !userId)
-    return res.status(400).json({ message: "missing required field!" });
-
+export const chat = async (req, res, next) => {
   try {
-    const user = await User.findById(userId);
+    const { threadId, message } = req.body;
+    const userId = req.user.id;
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
+    if (!threadId || !message) {
+      const error = new Error("Missing required fields");
+      error.statusCode = 400;
+      throw error;
     }
 
-    let thread = await Thread.findOne({ threadId });
+    const user = await User.findById(userId);
+    if (!user) {
+      const error = new Error("User not found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    let thread = await Thread.findOne({ threadId, owner: userId });
+    let isNewThread = false;
 
     if (!thread) {
+      isNewThread = true;
+
       thread = new Thread({
         threadId,
         owner: userId,
         title: message,
-        messages: [{ role: "User", content: message }],
+        messages: [{ role: "user", content: message }],
       });
     } else {
-      thread.messages.push({ role: "User", content: message });
+      thread.messages.push({ role: "user", content: message });
     }
 
     const aiResponse = await getOpenAIAPIResponse(message);
@@ -152,12 +119,13 @@ export const chat = async (req, res) => {
     thread.updatedAt = new Date();
     const savedThread = await thread.save();
 
-    user.threads.push(savedThread._id);
-    await user.save();
+    if (isNewThread) {
+      user.threads.push(savedThread._id);
+      await user.save();
+    }
 
-    return res.json({ reply: aiResponse.reply });
+    res.json({ reply: aiResponse.reply });
   } catch (err) {
-    console.error("error while creating chat!", err.message);
-    return res.status(500).json({ error: "Server Error!" });
+    next(err);
   }
 };

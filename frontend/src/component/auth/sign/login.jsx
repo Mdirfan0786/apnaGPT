@@ -1,15 +1,12 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import styles from "./login.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { clientServer } from "../../../config/clientServer";
-import { MyContext } from "../../../myContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const { setName } = useContext(MyContext);
 
   const navigate = useNavigate();
 
@@ -25,17 +22,17 @@ const Login = () => {
 
     try {
       const res = await clientServer.post("/login", {
-        email,
+        email: email.trim(),
         password,
       });
 
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("userId", res.data.user.id);
-      localStorage.setItem("name", res.data.user.name);
+      localStorage.setItem("username", res.data.user.name);
 
       navigate("/");
     } catch (err) {
-      alert(err.message || "Login failed");
+      const errorMessage = err.response?.data?.message || "Login failed";
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }

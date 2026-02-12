@@ -4,7 +4,7 @@ const MessageSchema = new mongoose.Schema(
   {
     role: {
       type: String,
-      enum: ["User", "assistant"],
+      enum: ["user", "assistant"],
       required: true,
     },
     content: {
@@ -13,7 +13,7 @@ const MessageSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // createdAt & updatedAt auto
+    timestamps: true,
   },
 );
 
@@ -26,7 +26,7 @@ const ThreadSchema = new mongoose.Schema(
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "user",
       required: true,
     },
     title: {
@@ -40,4 +40,6 @@ const ThreadSchema = new mongoose.Schema(
   },
 );
 
-export default mongoose.model("Thread", ThreadSchema);
+const Thread = mongoose.model("Thread", ThreadSchema);
+
+export default Thread;

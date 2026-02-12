@@ -20,31 +20,35 @@ const Register = () => {
       return;
     }
 
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const res = await clientServer.post("/register", {
-        name,
-        username,
-        email,
+        name: name.trim(),
+        username: username.trim(),
+        email: email.trim(),
         password,
       });
 
-      // if backend sends token on register
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);
-        localStorage.setItem("userId", res.data.user.id);
-        localStorage.setItem("name", res.data.user.name);
+        localStorage.setItem("username", res.data.user.name);
         navigate("/");
       } else {
         navigate("/login");
       }
     } catch (err) {
-      alert(
+      const errorMessage =
         err.response?.data?.error ||
-          err.response?.data?.message ||
-          "Registration failed",
-      );
+        err.response?.data?.message ||
+        "Registration failed";
+
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }

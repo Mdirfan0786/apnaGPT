@@ -19,11 +19,9 @@ function ChatLayout() {
   const [allThreads, setAllThreads] = useState([]);
   const [refreshThreads, setRefreshThreads] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [name, setName] = useState("");
-
-  useEffect(() => {
-    setName(localStorage.getItem("name"));
-  }, []);
+  const [name, setName] = useState(
+    () => localStorage.getItem("username") || "",
+  );
 
   return (
     <div className={styles.appContainer}>

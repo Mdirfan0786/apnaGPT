@@ -20,17 +20,19 @@ const Sidebar = () => {
   } = useContext(MyContext);
 
   const getAllThreads = async () => {
-    const userId = localStorage.getItem("userId");
-
     try {
-      const response = await clientServer.get(`/users/${userId}/threads`);
+      const response = await clientServer.get("/threads");
       const filteredData = response.data.map((thread) => ({
         threadId: thread.threadId,
         title: thread.title,
       }));
       setAllThreads(filteredData);
     } catch (err) {
-      console.log("Error while fetching threads", err.message);
+      if (err.response?.status === 401) {
+        window.location.href = "/login";
+      } else {
+        console.log("Error while fetching threads", err.message);
+      }
     }
   };
 
@@ -61,12 +63,8 @@ const Sidebar = () => {
     setCurrentThreadId(newThreadId);
     setIsSidebarOpen(false);
 
-    const userId = localStorage.getItem("userId");
-
     try {
-      const response = await clientServer.get(
-        `/threads/${newThreadId}/${userId}`,
-      );
+      const response = await clientServer.get(`/threads/${newThreadId}`);
 
       console.log(response.data);
       setPrevChats(response.data.messages);
@@ -79,14 +77,8 @@ const Sidebar = () => {
 
   // deleting thread
   const deleteThread = async (newThreadId) => {
-    setCurrentThreadId(newThreadId);
-
-    const userId = localStorage.getItem("userId");
-
     try {
-      const response = await clientServer.delete(
-        `/threads/${newThreadId}/${userId}`,
-      );
+      const response = await clientServer.delete(`/threads/${newThreadId}`);
 
       setAllThreads((prev) =>
         prev.filter((thread) => thread.threadId !== newThreadId),

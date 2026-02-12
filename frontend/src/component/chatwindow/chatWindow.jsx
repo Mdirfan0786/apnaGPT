@@ -10,8 +10,6 @@ const ChatWindow = () => {
   const {
     prompt,
     setPrompt,
-    reply,
-    setReply,
     currentThreadId,
     setPrevChats,
     setRefreshThreads,
@@ -26,36 +24,41 @@ const ChatWindow = () => {
 
   // sending request to API
   const getReply = async () => {
+    if (!prompt.trim()) return;
+
     setLoading(true);
 
     const userId = localStorage.getItem("userId");
+    const userMessage = prompt;
+
+    // push user message immediately
+    setPrevChats((prev) => [...prev, { role: "user", content: userMessage }]);
+    setPrompt("");
 
     try {
       const response = await clientServer.post("/chat", {
-        userId: userId,
-        message: prompt,
+        userId,
+        message: userMessage,
         threadId: currentThreadId,
       });
-      console.log(response.data.reply);
-      setReply(response.data.reply);
+
+      // push assistant message after API response
+      setPrevChats((prev) => [
+        ...prev,
+        { role: "assistant", content: response.data.reply },
+      ]);
+
       setRefreshThreads((prev) => !prev);
     } catch (err) {
-      console.error(err.message);
+      if (err.response?.status === 401) {
+        navigate("/login");
+      } else {
+        console.error(err.response?.data?.message || err.message);
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
-
-  useEffect(() => {
-    if (!prompt || !reply) return;
-
-    setPrevChats((prev) => [
-      ...prev,
-      { role: "User", content: prompt },
-      { role: "assistant", content: reply },
-    ]);
-
-    setPrompt("");
-  }, [reply]);
 
   // handling profile click
   const handleProfileClick = (e) => {
