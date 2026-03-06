@@ -170,3 +170,14 @@ npm run dev
 👨‍💻 Author
 
 Built with ❤️ by Md Irfan
+
+## 📬 Contact
+
+If you want to connect or collaborate with me:
+
+- **GitHub:** https://github.com/Mdirfan0786
+- **Portfolio:** https://apna-portfolio-drab.vercel.app/
+
+---
+
+⭐ If you like this project, please consider giving it a **star** on GitHub!
